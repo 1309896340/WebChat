@@ -4,13 +4,13 @@
         <div id="login-panel">
             <el-card id="login-main">
                 <div class="title">
-                    <h2>注册页面</h2>
+                    <h2>用户注册</h2>
                 </div>
                 <br>
-                <el-form :model="user" label-width="60px">
+                <el-form :model="user" label-width="80px">
                     <el-form-item label="用户名:">
                         <el-col :span="22">
-                            <el-input type="text" v-model="user.username" placeholder="字母开头至少4位的数字、字母组合"
+                            <el-input type="text"  v-model="user.username" placeholder="字母开头至少4位的数字、字母组合"
                                 @input="checkInput"></el-input>
                         </el-col>
                         &nbsp;
@@ -24,9 +24,9 @@
                         &nbsp;
                         <StateSign :ready="status.passwordReady" :status="status.passwordOk"></StateSign>
                     </el-form-item>
-                    <el-form-item>
+                    <el-form-item  label="重复密码:">
                         <el-col :span="22">
-                            <el-input type="password" v-model="user.rePassword" placeholder="重复输入密码" @input="checkInput"
+                            <el-input type="password"  v-model="user.rePassword" placeholder="重复输入密码" @input="checkInput"
                                 show-password></el-input>
                         </el-col>
                         &nbsp;

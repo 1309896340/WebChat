@@ -3,18 +3,18 @@
     <div id="login-panel">
         <el-card id="login-main">
             <div class="title">
-                <h2>登录界面</h2>
+                <h2>用户登录</h2>
             </div>
             <br>
-            <el-form :model="user" label-width="60px">
+            <el-form :model="user" label-width="80px">
                 <el-form-item label="用户名:">
                     <el-col :span="22">
-                        <el-input type="text" v-model="user.username" placeholder=""></el-input>
+                        <el-input type="text" prefix-icon="User" v-model="user.username" placeholder=""></el-input>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="密码:">
                     <el-col :span="22">
-                        <el-input type="password" v-model="user.password" placeholder="" show-password></el-input>
+                        <el-input type="password" prefix-icon="Lock" v-model="user.password" placeholder="" show-password></el-input>
                     </el-col>
                 </el-form-item>
             </el-form>
@@ -86,6 +86,7 @@ function login() {
 
 .el-card {
     /* background-color: blanchedalmond; */
+    /* background: linear-gradient(135deg, cyan, blue); */
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 

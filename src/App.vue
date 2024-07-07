@@ -19,6 +19,7 @@
 
 #top-body {
     background: linear-gradient(45deg, cyan, blue);
+    /* background: white; */
     position: absolute;
     display: flex;
     width: 100%;
