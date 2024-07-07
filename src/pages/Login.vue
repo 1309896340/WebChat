@@ -34,8 +34,6 @@ import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import { md5 } from "js-md5";
 import axios from "axios";
-import { callbackify } from "util";
-import { M } from "node_modules/vite/dist/node/types.d-aGj9QkWt";
 const router = useRouter();
 
 let user = reactive({
