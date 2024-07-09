@@ -50,7 +50,6 @@
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import StateSign from "@/components/StateSign.vue";
-import type { ElSelectV2 } from "element-plus/lib/components/index.js";
 const router = useRouter();
 
 let user = reactive({

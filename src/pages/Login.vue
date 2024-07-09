@@ -53,13 +53,13 @@ function login() {
         }
     }).then(response => {
         // 假设返回的对象格式为
-        // {status:"ok", message:"登录成功", isLogin: true}
-        // status反映服务器有无出现异常情况，如有异常会将详情记录在message中，在无异常时，isLogin表示登录认证是否通过
+        // {isLogin: true, message:"登录成功"}
+        // isLogin表示登录认证是否通过，message附带一些描述信息
         
         console.log(response);
         if (response.status == 200) {
             let obj = JSON.parse(response.data);
-            if (obj.status == "ok") {
+            if (obj.isLogin) {
                 // 弹窗提示登录成功
             } else {
                 console.log(obj.message);
