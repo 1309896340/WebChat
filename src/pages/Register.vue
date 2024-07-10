@@ -113,13 +113,16 @@ function checkInput() {
 function register() {
     if (status.usernameReady && !status.usernameOk) {
         ElMessage.error("用户名不合法！");
+        return;
     }
     if (status.passwordReady && !status.passwordOk) {
         ElMessage.error("密码不合法！");
+        return;
     }
-    if (status.rePasswordReady && !status.usernameOk) {
+    if (status.rePasswordReady && !status.rePasswordOk) {
         ElMessage.error("重复密码与输入密码不一致！");
         user.rePassword = "";
+        return;
     }
 
     axios.post("http://localhost:8080/api/register", {
@@ -130,8 +133,8 @@ function register() {
             console.log("服务器端可能发生了错误！");
             return;
         }
-        let data = JSON.parse(response.data);
-        if (data.status == true) {
+        console.log(response.data);
+        if (response.data.status == true) {
             ElMessageBox.alert(
                 "注册成功！", "消息",
                 {
@@ -146,6 +149,8 @@ function register() {
                 }
             })
         }
+    }).catch(error => {
+        console.log(error);
     })
 }
 

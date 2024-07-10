@@ -14,7 +14,8 @@
                 </el-form-item>
                 <el-form-item label="密码:">
                     <el-col :span="22">
-                        <el-input type="password" prefix-icon="Lock" v-model="user.password" placeholder="" show-password></el-input>
+                        <el-input type="password" prefix-icon="Lock" v-model="user.password" placeholder=""
+                            show-password></el-input>
                     </el-col>
                 </el-form-item>
             </el-form>
@@ -23,7 +24,7 @@
                 <el-button @click="login">登录</el-button>
                 &emsp;
                 <!-- <el-link href="#" @click="toRegister">注册</el-link> -->
-                 <router-link to="/register" class="router-link">注册</router-link>
+                <router-link to="/register" class="router-link">注册</router-link>
             </div>
         </el-card>
     </div>
@@ -34,6 +35,7 @@
 import { reactive } from "vue";
 import { onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { ElMessageBox, ElMessage } from "element-plus";
 import { md5 } from "js-md5";
 import axios from "axios";
 const router = useRouter();
@@ -44,35 +46,39 @@ let user = reactive({
     password: ""
 });
 
-onMounted(()=>{
+onMounted(() => {
     let username = route.query.username as string;
     user.username = username;
     console.log(route.query);
 });
 
 function login() {
-    axios.get("127.0.0.1:8080/api/login", {
-        params: {
-            username: user.username,
-            password: md5(user.password)
-        }
+    axios.post("http://localhost:8080/api/login", {
+        username: user.username,
+        password: md5(user.password)
     }).then(response => {
         // 假设返回的对象格式为
-        // {isLogin: true, message:"登录成功"}
-        // isLogin表示登录认证是否通过，message附带一些描述信息
-        
+        // {status: true, message:"登录成功"}
+        // status表示登录认证是否通过，message附带一些描述信息
         console.log(response);
-        if (response.status == 200) {
-            let obj = JSON.parse(response.data);
-            if (obj.isLogin) {
-                // 弹窗提示登录成功
-            } else {
-                console.log(obj.message);
-            }
+        if (response.status != 200)
+            return;
+
+        if (response.data.status != true) {
+            ElMessage.error("登录失败，用户名或密码错误！");
+            return;
         }
+        // 弹窗提示登录成功
+        ElMessageBox.alert(
+            "登录成功！", "消息",
+            {
+                confirmButtonText: "确定"
+            }
+        );
+        
 
     }).catch(error => {
-
+        console.log(error);
     });
 
 }
@@ -123,7 +129,7 @@ function login() {
     font-size: 20px;
 }
 
-.router-link{
+.router-link {
     text-decoration: none
 }
 
