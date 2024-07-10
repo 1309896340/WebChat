@@ -9,10 +9,6 @@
     import { RouterView, useRouter } from "vue-router";
 
     const router = useRouter();
-    
-    onMounted(()=>{
-        router.replace("/login");
-    });
 </script>
 
 <style scoped>

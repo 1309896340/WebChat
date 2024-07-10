@@ -10,7 +10,7 @@
                 <el-form :model="user" label-width="80px">
                     <el-form-item label="用户名:">
                         <el-col :span="22">
-                            <el-input type="text"  v-model="user.username" placeholder="字母开头至少4位的数字、字母组合"
+                            <el-input type="text" v-model="user.username" placeholder="字母开头至少4位的数字、字母组合"
                                 @input="checkInput"></el-input>
                         </el-col>
                         &nbsp;
@@ -24,9 +24,9 @@
                         &nbsp;
                         <StateSign :ready="status.passwordReady" :status="status.passwordOk"></StateSign>
                     </el-form-item>
-                    <el-form-item  label="重复密码:">
+                    <el-form-item label="重复密码:">
                         <el-col :span="22">
-                            <el-input type="password"  v-model="user.rePassword" placeholder="重复输入密码" @input="checkInput"
+                            <el-input type="password" v-model="user.rePassword" placeholder="重复输入密码" @input="checkInput"
                                 show-password></el-input>
                         </el-col>
                         &nbsp;
@@ -38,7 +38,8 @@
                 <div class="login-btn">
                     <el-button @click="register">注册</el-button>
                     &emsp;
-                    <el-link href="#" @click="toLogin">登录</el-link>
+                    <!-- <el-link href="#" @click="toLogin">登录</el-link> -->
+                    <router-link to="/login" class="router-link">登录</router-link>
                 </div>
             </el-card>
         </div>
@@ -47,9 +48,13 @@
 
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
+import { reactive } from "vue";
 import StateSign from "@/components/StateSign.vue";
+import { md5 } from "js-md5";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { useRouter } from "vue-router"
+import axios from "axios";
+
 const router = useRouter();
 
 let user = reactive({
@@ -82,38 +87,66 @@ function checkInput() {
         let res = user.username.search(/^[a-zA-Z]\w{3,}$/g);
         console.log("username:", res);
         if (res != 0)
-        status.usernameOk = false;
+            status.usernameOk = false;
         else
-        status.usernameOk = true;
+            status.usernameOk = true;
     }
     if (status.passwordReady) {
         let res = user.password.search(/^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)])+$).{6,20}$/g);
         console.log("password:", res);
         if (res != 0)
-        status.passwordOk = false;
+            status.passwordOk = false;
         else
-        status.passwordOk = true;
+            status.passwordOk = true;
     }
     if (status.rePasswordReady) {
-        if(user.rePassword==""){
+        if (user.rePassword == "") {
             status.rePasswordOk = false;
-        }else if(user.password != user.rePassword){
+        } else if (user.password != user.rePassword) {
             status.rePasswordOk = false;
-        }else{
+        } else {
             status.rePasswordOk = true;
         }
     }
 }
 
-function toLogin() {
-    router.push("/login");
-}
-
 function register() {
-    if (user.password != user.rePassword) {
-
+    if (status.usernameReady && !status.usernameOk) {
+        ElMessage.error("用户名不合法！");
     }
-    console.log(user);
+    if (status.passwordReady && !status.passwordOk) {
+        ElMessage.error("密码不合法！");
+    }
+    if (status.rePasswordReady && !status.usernameOk) {
+        ElMessage.error("重复密码与输入密码不一致！");
+        user.rePassword = "";
+    }
+
+    axios.post("http://localhost:8080/api/register", {
+        username: user.username,
+        password: md5(user.password)
+    }).then(response => {
+        if (response.status != 200) {
+            console.log("服务器端可能发生了错误！");
+            return;
+        }
+        let data = JSON.parse(response.data);
+        if (data.status == true) {
+            ElMessageBox.alert(
+                "注册成功！", "消息",
+                {
+                    confirmButtonText: "确定"
+                }
+            );
+            // 注册成功，带参数跳转到登录界面
+            router.push({
+                path: "login",
+                query: {
+                    username: user.username
+                }
+            })
+        }
+    })
 }
 
 </script>
@@ -148,6 +181,12 @@ function register() {
     height: 100%;
     text-align: left;
 }
+
+.router-link {
+    text-decoration: none
+}
+
+
 
 
 .el-input {

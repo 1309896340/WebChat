@@ -22,7 +22,8 @@
             <div class="login-btn">
                 <el-button @click="login">登录</el-button>
                 &emsp;
-                <el-link href="#" @click="toRegister">注册</el-link>
+                <!-- <el-link href="#" @click="toRegister">注册</el-link> -->
+                 <router-link to="/register" class="router-link">注册</router-link>
             </div>
         </el-card>
     </div>
@@ -31,19 +32,23 @@
 
 <script lang="ts" setup>
 import { reactive } from "vue";
-import { useRouter } from "vue-router";
+import { onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { md5 } from "js-md5";
 import axios from "axios";
 const router = useRouter();
+const route = useRoute("login");
 
 let user = reactive({
     username: "",
     password: ""
 });
 
-function toRegister() {
-    router.push("/register");
-}
+onMounted(()=>{
+    let username = route.query.username as string;
+    user.username = username;
+    console.log(route.query);
+});
 
 function login() {
     axios.get("127.0.0.1:8080/api/login", {
@@ -116,6 +121,10 @@ function login() {
 
 .el-button {
     font-size: 20px;
+}
+
+.router-link{
+    text-decoration: none
 }
 
 
