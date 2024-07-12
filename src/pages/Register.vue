@@ -125,7 +125,7 @@ function register() {
         return;
     }
 
-    axios.post("http://localhost:8080/api/register", {
+    axios.post("http://localhost:8080/register", {
         username: user.username,
         password: md5(user.password)
     }).then(response => {
@@ -134,21 +134,30 @@ function register() {
             return;
         }
         console.log(response.data);
-        if (response.data.status == true) {
-            ElMessageBox.alert(
-                "注册成功！", "消息",
-                {
-                    confirmButtonText: "确定"
-                }
-            );
-            // 注册成功，带参数跳转到登录界面
-            router.push({
-                path: "login",
-                query: {
-                    username: user.username
-                }
-            })
+        if (response.data.status!="SUCCESS") {
+            // 可能发生了错误
+            console.log("Register.vue中发生了错误，错误代码为：", response.data.status);
+            if(response.data.status=="REGISTER_FAILURE"){    // 注册错误
+
+            }else{  //其他错误
+                
+            }
+            return;
         }
+        ElMessageBox.alert(
+            "注册成功！", "注册",
+            {
+                confirmButtonText: "确定"
+            }
+        );
+        // 注册成功，带参数跳转到登录界面
+        router.push({
+            path: "login",
+            query: {
+                username: user.username
+            }
+        })
+        
     }).catch(error => {
         console.log(error);
     })

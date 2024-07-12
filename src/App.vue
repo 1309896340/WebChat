@@ -5,7 +5,6 @@
 </template>
 
 <script lang="ts" setup>
-    import {onMounted} from "vue";
     import { RouterView, useRouter } from "vue-router";
 
     const router = useRouter();

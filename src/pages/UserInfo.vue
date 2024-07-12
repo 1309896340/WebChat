@@ -7,7 +7,7 @@
             </el-form-item>
             <el-form-item label="性别：">
                 <el-radio-group v-model="userInfo.sex">
-                    <el-radio value="null">保密</el-radio>
+                    <el-radio value="unknown">保密</el-radio>
                     <el-radio value="male">男<el-icon>
                             <Male />
                         </el-icon></el-radio>
@@ -60,7 +60,7 @@ onMounted(() => {
         /* 
             约定：response.data的格式为
             {
-                status: Number     // 1为成功，2为找不到session返回空，3为其他失败情况
+                status: Number     // 具体为什么值需要查看后端的MessageState.java
                 data: {            // 当status=1时会返回对应所有信息
                     nickname: 
                     sex:
@@ -75,6 +75,7 @@ onMounted(() => {
             console.log(response);
             return;
         }
+        console.log(response.data);
         let obj = response.data.data;
         console.log("在UserInfo.vue的onMounted()中请求服务器查询的结果：", obj);
         Object.assign(userInfo, obj);

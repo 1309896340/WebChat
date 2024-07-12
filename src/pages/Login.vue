@@ -53,7 +53,7 @@ onMounted(() => {
 });
 
 function login() {
-    axios.post("http://localhost:8080/api/login", {
+    axios.post("http://localhost:8080/login", {
         username: user.username,
         password: md5(user.password)
     }).then(response => {
@@ -64,18 +64,26 @@ function login() {
         if (response.status != 200)
             return;
 
-        if (response.data.status != true) {
-            ElMessage.error("登录失败，用户名或密码错误！");
+        if (response.data.status != "SUCCESS") {
+            console.log("Login.vue中发生了错误，错误代码为：", response.data.status);
+            if (response.data.status == "LOGIN_FAILURE") {
+                ElMessage.error("登录失败，用户名或密码错误！");
+            } else {    // 其他错误
+
+            }
             return;
         }
         // 弹窗提示登录成功
         ElMessageBox.alert(
-            "登录成功！", "消息",
+            "登录成功！", "登录",
             {
                 confirmButtonText: "确定"
             }
         );
-        
+        // 跳转到个人信息页面
+        router.push({
+            path: "/userinfo"
+        })
 
     }).catch(error => {
         console.log(error);
