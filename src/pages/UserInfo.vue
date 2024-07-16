@@ -55,7 +55,10 @@ let userInfo = reactive({
 
 onMounted(() => {
     // 在挂载后立即发送axios.get获取用户信息
-    axios.get("http://127.0.0.1:8080/api/userinfo").then(response => {
+    axios.defaults.withCredentials = true;
+    axios.get("http://127.0.0.1:8080/api/userinfo",{
+        withCredentials: true
+    }).then(response => {
         // 靠服务器端的session来决定是否正确响应
         /* 
             约定：response.data的格式为
